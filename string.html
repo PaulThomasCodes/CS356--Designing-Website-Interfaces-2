@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Strings Exercise</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>String Manipulation</h1>
+
+    <form>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName"><br><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName"><br><br>
+
+        <label for="zipCode">Zip Code:</label>
+        <input type="text" id="zipCode" name="zipCode"><br><br>
+
+        <button type="button" onclick="validateAndShowMessage()">Submit</button>
+    </form>
+
+    <img src="deer_pic.jpg" alt="deer_pic">
+
+    <p id="result"></p>
+
+    <script>
+        function validateAndShowMessage() {
+            // Get user input
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var zipCode = document.getElementById("zipCode").value;
+
+            // Combine first and last names
+            var fullName = firstName + " " + lastName;
+
+            // Validate full name
+            if (fullName.length > 20) {
+                alert("Full name cannot be longer than 20 characters.");
+                return;
+            }
+
+            // Validate zip code
+            if (zipCode.length !== 5 || !/^\d+$/.test(zipCode)) {
+                alert("Invalid zip code. Please enter a 5-digit number.");
+                return;
+            }
+
+            // Show secret message
+            var secretMessage = "Welcome, " + fullName + "! Your zip code is: " + zipCode;
+            document.getElementById("result").textContent = secretMessage;
+        }
+    </script>
+</body>
+</html>
