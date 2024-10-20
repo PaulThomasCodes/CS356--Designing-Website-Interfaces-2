@@ -1,102 +1,102 @@
+<?php
+// Function to validate form data
+function validate($data) {
+    $errors = [];
+
+    // Check if required fields are filled
+    if (empty($data['Full_Name'])) $errors[] = 'First Name is required.';
+    if (empty($data['Last_Name'])) $errors[] = 'Last Name is required.';
+    if (empty($data['Email']) || !filter_var($data['Email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid Email is required.';
+    if (empty($data['city'])) $errors[] = 'City is required.';
+    if (empty($data['county'])) $errors[] = 'County is required.';
+    if (empty($data['Land_Size']) || floatval($data['Land_Size']) <= 0) $errors[] = 'A valid Land Size is required.';
+    if (!isset($data['primary_residence'])) $errors[] = 'Please select if this is your primary residence.';
+    if (empty($data['primary_residence_details'])) $errors[] = 'Primary Residence Details are required.';
+    if (empty($data['land_type'])) $errors[] = 'At least one Land Type is required.';
+
+    return $errors;
+}
+
+$errors = [];
+$successMessage = '';
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $errors = validate($_POST);
+
+    // If no errors, show success message
+    if (empty($errors)) {
+        $successMessage = 'Form submitted successfully!';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Landee Deed Registry</title>
     <link rel="stylesheet" href="w3appcss.css">
-    <!-- Include Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <!-- JavaScript for Validation and Interaction -->
     <script>
+        // Function to validate form on the client side
         function validateForm(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent form from submitting
 
-            // Form Field Variables
             const form = document.forms['deed_registration'];
-            const fullName = form['Full_Name'];
-            const lastName = form['Last_Name'];
-            const email = form['Email'];
-            const city = form['city'];
-            const county = form['county'];
-            const landSize = form['Land_Size'];
-            const residenceRadios = form['primary_residence'];
-            const primaryResidenceDetails = form['primary_residence_details'];
-            const landTypeCheckboxes = form.querySelectorAll('input[name="land_type"]:checked');
-
+            const requiredFields = ['Full_Name', 'Last_Name', 'Email', 'city', 'county', 'Land_Size', 'primary_residence', 'primary_residence_details'];
             let errorMessages = [];
             let isValid = true;
 
-            // Clear previous error styles
+            // Clear previous errors
             document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
             document.getElementById('error-message').style.display = 'none';
 
-            // Validation Logic
-            if (fullName.value.trim() === '') {
-                errorMessages.push('First Name is required.');
-                fullName.classList.add('error');
+            // Validate required fields
+            requiredFields.forEach(field => {
+                const element = form[field];
+                if (!element.value.trim()) {
+                    errorMessages.push(`${element.previousElementSibling.textContent} is required.`);
+                    element.classList.add('error');
+                    isValid = false;
+                }
+            });
+
+            // Validate email format
+            if (!form['Email'].value.includes('@')) {
+                errorMessages.push('A valid Email is required.');
+                form['Email'].classList.add('error');
                 isValid = false;
             }
 
-            if (lastName.value.trim() === '') {
-                errorMessages.push('Last Name is required.');
-                lastName.classList.add('error');
+            // Validate land size
+            if (parseFloat(form['Land_Size'].value) <= 0) {
+                errorMessages.push('A valid Land Size is required.');
+                form['Land_Size'].classList.add('error');
                 isValid = false;
             }
 
-            if (email.value.trim() === '' || !email.value.includes('@')) {
-                errorMessages.push('A valid Email Address is required.');
-                email.classList.add('error');
+            // Validate primary residence selection
+            if (!form.querySelector('input[name="primary_residence"]:checked')) {
+                errorMessages.push('Please select if this is your primary residence.');
+                form['primary_residence'][0].parentElement.classList.add('error');
                 isValid = false;
             }
 
-            if (![...residenceRadios].some(radio => radio.checked)) {
-                errorMessages.push('Please select your primary residence option.');
-                document.getElementById('residence-options').classList.add('error');
-                isValid = false;
-            } else if (form['primary_residence'].value === 'no' && primaryResidenceDetails.value.trim() === '') {
-                errorMessages.push('Please provide your primary place of residence.');
-                primaryResidenceDetails.classList.add('error');
-                isValid = false;
-            }
-
-            if (county.value === '') {
-                errorMessages.push('Please select a county.');
-                county.classList.add('error');
-                isValid = false;
-            }
-
-            if (city.value.trim() === '') {
-                errorMessages.push('City is required.');
-                city.classList.add('error');
-                isValid = false;
-            }
-
-            if (landSize.value.trim() === '' || isNaN(landSize.value) || parseFloat(landSize.value) <= 0) {
-                errorMessages.push('Please enter a valid land size.');
-                landSize.classList.add('error');
-                isValid = false;
-            }
-
-            if (landTypeCheckboxes.length === 0) {
-                errorMessages.push('Please select at least one land type.');
+            // Validate at least one land type is selected
+            if (!form.querySelector('input[name="land_type"]:checked')) {
+                errorMessages.push('At least one Land Type is required.');
                 document.getElementById('land-type-options').classList.add('error');
                 isValid = false;
             }
 
+            // Show errors if any, else submit form
             if (!isValid) {
-                const errorMessageContainer = document.getElementById('error-message');
-                errorMessageContainer.innerHTML = '<ul><li>' + errorMessages.join('</li><li>') + '</li></ul>';
-                errorMessageContainer.style.display = 'block';
+                document.getElementById('error-message').innerHTML = errorMessages.join('<br>');
+                document.getElementById('error-message').style.display = 'block';
             } else {
                 form.submit();
             }
-        }
-
-        function toggleResidenceDetails() {
-            const noResidence = document.getElementById('primary_residence_no').checked;
-            const detailsSection = document.getElementById('primary_residence_details_section');
-            detailsSection.style.display = noResidence ? 'block' : 'none';
         }
     </script>
 </head>
@@ -104,87 +104,62 @@
     <header>
         <h1>Landee Deed Registry</h1>
     </header>
-
     <main>
-        <form name="deed_registration" onsubmit="validateForm(event)">
-            <!-- Error Message Container -->
-            <div id="error-message"></div>
-
-            <!-- Personal Information Section -->
+        <?php if (!empty($errors)): ?>
+            <div id="error-message"><?php echo implode('<br>', $errors); ?></div>
+        <?php elseif ($successMessage): ?>
+            <div id="success-message"><?php echo $successMessage; ?></div>
+        <?php endif; ?>
+        <form name="deed_registration" method="POST" action="" onsubmit="validateForm(event)">
             <fieldset>
                 <legend>Personal Information</legend>
-
-                <label for="full_name">First Name</label>
-                <input type="text" id="full_name" name="Full_Name" placeholder="Enter your first name">
-
-                <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="Last_Name" placeholder="Enter your last name">
-
-                <label for="email">Email Address</label>
-                <input type="text" id="email" name="Email" placeholder="Enter your email address">
-
-                <label>Do you live in Liberia for 6 or more consecutive months at a time?</label>
-                <div class="option-group" id="residence-options">
-                    <label>
-                        <input type="radio" name="primary_residence" value="yes" onclick="toggleResidenceDetails()">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" id="primary_residence_no" name="primary_residence" value="no" onclick="toggleResidenceDetails()">
-                        No
-                    </label>
-                </div>
-
-                <div id="primary_residence_details_section" style="display: none;">
-                    <label for="primary_residence_details">Primary Place of Residence</label>
-                    <input type="text" id="primary_residence_details" name="primary_residence_details" placeholder="Country and State/Province">
-                </div>
+                <label for="Full_Name">First Name</label>
+                <input type="text" id="Full_Name" name="Full_Name" value="<?php echo htmlspecialchars($_POST['Full_Name'] ?? ''); ?>">
+                
+                <label for="Last_Name">Last Name</label>
+                <input type="text" id="Last_Name" name="Last_Name" value="<?php echo htmlspecialchars($_POST['Last_Name'] ?? ''); ?>">
+                
+                <label for="Email">Email</label>
+                <input type="email" id="Email" name="Email" value="<?php echo htmlspecialchars($_POST['Email'] ?? ''); ?>">
             </fieldset>
-
-            <!-- Land Information Section -->
+            
             <fieldset>
                 <legend>Land Information</legend>
-
-                <label for="county">Land Location (County)</label>
+                <label for="primary_residence">Is this your primary residence?</label>
+                <input type="radio" id="primary_residence_yes" name="primary_residence" value="yes" <?php echo (isset($_POST['primary_residence']) && $_POST['primary_residence'] == 'yes') ? 'checked' : ''; ?>> Yes
+                <input type="radio" id="primary_residence_no" name="primary_residence" value="no" <?php echo (isset($_POST['primary_residence']) && $_POST['primary_residence'] == 'no') ? 'checked' : ''; ?>> No
+                
+                <label for="primary_residence_details">Primary Residence Details</label>
+                <input type="text" id="primary_residence_details" name="primary_residence_details" value="<?php echo htmlspecialchars($_POST['primary_residence_details'] ?? ''); ?>">
+                
+                <label for="county">County</label>
                 <select id="county" name="county">
-                    <option value="">Select a county</option>
-                    <option value="Bomi">Bomi</option>
-                    <option value="Bong">Bong</option>
-                    <option value="Gbarpolu">Gbarpolu</option>
-                    <option value="Grand Bassa">Grand Bassa</option>
-                    <option value="Grand Cape Mount">Grand Cape Mount</option>
-                    <option value="Grand Gedeh">Grand Gedeh</option>
-                    <option value="Grand Kru">Grand Kru</option>
-                    <option value="Lofa">Lofa</option>
-                    <option value="Margibi">Margibi</option>
-                    <option value="Maryland">Maryland</option>
-                    <option value="Montserrado">Montserrado</option>
-                    <option value="Nimba">Nimba</option>
-                    <option value="River Cess">River Cess</option>
-                    <option value="River Gee">River Gee</option>
-                    <option value="Sinoe">Sinoe</option>
+                    <?php
+                    // List of counties
+                    $counties = ["Bomi", "Bong", "Gbarpolu", "Grand Bassa", "Grand Cape Mount", "Grand Gedeh", "Grand Kru", "Lofa", "Margibi", "Maryland", "Montserrado", "Nimba", "River Cess", "River Gee", "Sinoe"];
+                    foreach ($counties as $county) {
+                        $selected = (isset($_POST['county']) && $_POST['county'] == $county) ? 'selected' : '';
+                        echo "<option value=\"$county\" $selected>$county</option>";
+                    }
+                    ?>
                 </select>
 
                 <label for="city">Land Location (City)</label>
-                <input type="text" id="city" name="city" placeholder="Enter the city">
+                <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($_POST['city'] ?? ''); ?>">
 
                 <label for="land_size">Land Size (in acres)</label>
-                <input type="number" id="land_size" name="Land_Size" step="0.01" min="0.01" placeholder="Enter land size">
+                <input type="number" id="land_size" name="Land_Size" step="0.01" min="0.01" value="<?php echo htmlspecialchars($_POST['Land_Size'] ?? ''); ?>">
 
                 <label>Land Type</label>
                 <div class="option-group" id="land-type-options">
-                    <label>
-                        <input type="checkbox" name="land_type" value="residential">
-                        Residential
-                    </label>
-                    <label>
-                        <input type="checkbox" name="land_type" value="farm">
-                        Farm
-                    </label>
-                    <label>
-                        <input type="checkbox" name="land_type" value="commercial">
-                        Commercial
-                    </label>
+                    <?php
+                    // Land type options
+                    $landTypes = ["residential" => "Residential", "farm" => "Farm", "commercial" => "Commercial"];
+                    foreach ($landTypes as $value => $label) {
+                        $checked = (isset($_POST['land_type']) && in_array($value, $_POST['land_type'])) ? 'checked' : '';
+                        echo "<label><input type=\"checkbox\" name=\"land_type[]\" value=\"$value\" $checked> $label</label>";
+                    }
+                    ?>
                 </div>
             </fieldset>
 
