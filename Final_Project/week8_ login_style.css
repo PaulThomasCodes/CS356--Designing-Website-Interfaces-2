@@ -7,89 +7,80 @@ body {
     background-color: #f8f9fa; /* Soft white background */
     margin: 0;
     padding: 0;
+}
+
+/* Menu Bar Styling */
+.menu-bar {
+    background-color: #c9a44a;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.menu-bar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.menu-bar a:hover {
+    background-color: #575757;
+}
+
+.menu-bar a.active {
+    background-color: #4CAF50; /* Highlight color */
+}
+
+/* Split Screen Layout */
+.split {
     display: flex;
+    height: 100vh;
+}
+
+/* Left Section Styling */
+.left {
+    flex: 1;
+    background-color: #333;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Right Section Styling */
+.right {
+    flex: 1;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Ensures full height view for centering */
-    position: relative; /* Needed for absolute positioning of header */
+    padding: 20px;
 }
 
-/* Header and Navigation Styling */
-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    background-color: #fff; /* Background color for header */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-nav {
-    display: flex;
-    gap: 20px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-nav a:hover {
-    color: #c9a44a; /* Change color on hover */
-}
-
-nav a.active {
-    color: #4e6959; /* Color for active link */
+.right h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #4e6959; /* Matches the soft green */
 }
 
 /* Form Container Styling */
 form {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f3f1 100%); /* Subtle gradient */
-    width: 100%;
-    max-width: 400px; /* Restrict width for smaller screens */
-    padding: 40px;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f3f1 100%);
+    width: 400px;
+    padding: 40px 50px;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
-}
-
-/* Decorative Elements */
-form::before {
-    content: '';
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 150px;
-    height: 150px;
-    background-color: rgba(201, 164, 74, 0.15); /* Soft gold circle */
-    border-radius: 50%;
-}
-
-form::after {
-    content: '';
-    position: absolute;
-    bottom: -50px;
-    left: -50px;
-    width: 150px;
-    height: 150px;
-    background-color: rgba(78, 105, 89, 0.15); /* Soft green circle */
-    border-radius: 50%;
-}
-
-/* Form Header Styling */
-h1 {
-    text-align: center;
-    color: #4e6959; /* Soft green */
-    margin-bottom: 30px;
-    font-size: 2em;
-    font-weight: 700;
 }
 
 /* Input and Label Styling */
@@ -103,8 +94,8 @@ form label {
 form input[type="text"],
 form input[type="password"] {
     width: 100%;
-    padding: 14px;
-    margin-bottom: 20px;
+    padding: 14px 18px;
+    margin-bottom: 25px;
     border: none;
     border-radius: 8px;
     background-color: #f1f3f2;
@@ -119,16 +110,10 @@ form input[type="password"]:focus {
     box-shadow: 0 0 0 2px #c9a44a; /* Soft gold focus ring */
 }
 
-/* Placeholder Styling */
-::placeholder {
-    color: #9da8a1;
-    opacity: 0.7;
-}
-
 /* Submit Button Styling */
-form button[type="submit"] {
+form button {
     width: 100%;
-    padding: 14px;
+    padding: 16px;
     background-color: #c9a44a; /* Soft gold */
     border: none;
     border-radius: 8px;
@@ -139,32 +124,76 @@ form button[type="submit"] {
     transition: background-color 0.3s, transform 0.2s;
 }
 
-form button[type="submit"]:hover {
+form button:hover {
     background-color: #b4913f;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-form button[type="submit"]:active {
+form button:active {
     transform: translateY(0);
     box-shadow: none;
 }
 
 /* Error Message Styling */
-.errorMessage {
+#error-message {
     background-color: rgba(231, 76, 60, 0.1);
     color: #e74c3c;
     padding: 12px;
     border-radius: 8px;
     margin-bottom: 20px;
     display: none;
-    text-align: center;
+}
+
+#error-message ul {
+    margin: 0;
+    padding-left: 20px;
 }
 
 /* Responsive Design */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+    .split {
+        flex-direction: column;
+    }
+
+    .left, .right {
+        flex: none;
+        width: 100%;
+    }
+
+    .right {
+        padding: 15px;
+    }
+
     form {
         width: 90%;
         padding: 30px;
     }
+}
+
+/* Hover Animation for the Home Button */
+.menu-bar a:hover {
+    transform: translateY(-2px); /* Moves up slightly */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth animation */
+    background-color: #4CAF50; /* Ensure the hover background is consistent */
+}
+
+/* Hover Animation for Input Fields */
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f3f2;
+    font-size: 1em;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s ease; /* Added transform for hover */
+}
+
+form input[type="text"]:hover,
+form input[type="password"]:hover {
+    transform: translateY(-2px); /* Moves up slightly on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+    background-color: #ffffff; /* Ensures hover background stands out */
 }
