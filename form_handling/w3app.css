@@ -1,0 +1,248 @@
+/* Import Google Fonts for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* General Page Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Soft white background */
+    margin: 0;
+    padding: 0;
+}
+
+/* Center the form on the page */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Form Container Styling */
+form {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f3f1 100%); /* Subtle gradient */
+    width: 400px;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out; /* Added smooth transition */
+}
+
+/* Decorative Elements */
+form::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(201, 164, 74, 0.15); /* Soft gold circle */
+    border-radius: 50%;
+}
+
+form::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(78, 105, 89, 0.15); /* Soft green circle */
+    border-radius: 50%;
+}
+
+/* Header Styling */
+header h1 {
+    text-align: center;
+    color: #4e6959; /* Soft green */
+    margin-bottom: 40px;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+/* Input and Label Styling */
+form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f1f3f2;
+    font-size: 1em;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s ease-in-out; /* Smooth transition */
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form select:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px #c9a44a; /* Soft gold focus ring */
+    transform: scale(1.02); /* Slight scaling effect */
+}
+
+/* Placeholder Styling */
+::placeholder {
+    color: #9da8a1;
+    opacity: 0.7;
+}
+
+/* Radio Buttons and Checkboxes Styling */
+form .option-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+form .option-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    margin-bottom: 0;
+    color: #333;
+}
+
+form .option-group input[type="radio"],
+form .option-group input[type="checkbox"] {
+    appearance: none;
+    background-color: #f1f3f2;
+    margin: 0;
+    font: inherit;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form .option-group input[type="radio"]::before,
+form .option-group input[type="checkbox"]::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.2s ease-in-out;
+    background-color: #c9a44a; /* Soft gold */
+}
+
+form .option-group input[type="checkbox"] {
+    border-radius: 4px;
+}
+
+form .option-group input[type="checkbox"]::before {
+    border-radius: 2px;
+}
+
+form .option-group input[type="radio"]:checked::before,
+form .option-group input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+/* Submit Button Styling */
+form input[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background-color: #c9a44a; /* Soft gold */
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+form input[type="submit"]:hover {
+    background-color: #b4913f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Error Message Styling */
+#error-message {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+    opacity: 0; /* Start invisible */
+    animation: fadeIn 0.5s forwards; /* Fade-in animation */
+}
+
+#error-message ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Error Class for Inputs */
+.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    box-shadow: 0 0 0 2px #e74c3c;
+}
+
+.error::placeholder {
+    color: #e74c3c;
+}
+
+/* Adjust Fieldset and Legend */
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+legend {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #4e6959; /* Soft green */
+    border-bottom: 2px solid #d4d9d6;
+    padding-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    form {
+        width: 90%;
+        padding: 30px;
+    }
+}
+
+/* Decorative Divider */
+hr {
+    border: none;
+    border-top: 1px solid #d4d9d6;
+    margin: 30px 0;
+}
+
+/* Fade-in animation for error message */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
