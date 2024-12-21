@@ -10,9 +10,11 @@ function validate($data) {
     if (empty($data['city'])) $errors[] = 'City is required.';
     if (empty($data['county'])) $errors[] = 'County is required.';
     if (empty($data['Land_Size']) || floatval($data['Land_Size']) <= 0) $errors[] = 'A valid Land Size is required.';
-    if (!isset($data['primary_residence'])) $errors[] = 'Please select if this is your primary residence.';
+    if (empty($data['primary_residence'])) $errors[] = 'Please select if this is your primary residence.'; // Fixed validation for radio button
     if (empty($data['primary_residence_details'])) $errors[] = 'Primary Residence Details are required.';
-    if (empty($data['land_type'])) $errors[] = 'At least one Land Type is required.';
+    if (!isset($data['land_type']) || !is_array($data['land_type']) || count($data['land_type']) === 0) {
+        $errors[] = 'At least one Land Type is required.'; // Fixed validation for checkboxes
+    }
 
     return $errors;
 }
@@ -78,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validate required fields
             requiredFields.forEach(field => {
                 const element = form[field];
-                if (!element.value.trim()) {
-                    errorMessages.push(${element.previousElementSibling.textContent} is required.);
+                if (element && !element.value.trim()) {
+                    errorMessages.push(`${element.previousElementSibling.textContent} is required.`);
                     element.classList.add('error');
                     isValid = false;
                 }
@@ -104,14 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validate primary residence selection
             if (!form.querySelector('input[name="primary_residence"]:checked')) {
                 errorMessages.push('Please select if this is your primary residence.');
-                form['primary_residence'][0].parentElement.classList.add('error');
                 isValid = false;
             }
 
             // Validate at least one land type is selected
-            if (!form.querySelector('input[name="land_type"]:checked')) {
+            if (!form.querySelector('input[name="land_type[]"]:checked')) {
                 errorMessages.push('At least one Land Type is required.');
-                document.getElementById('land-type-options').classList.add('error');
                 isValid = false;
             }
 
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Land type options
                     $landTypes = ["residential" => "Residential", "farm" => "Farm", "commercial" => "Commercial"];
                     foreach ($landTypes as $value => $label) {
-                        $checked = (isset($_POST['land_type']) && in_array($value, $_POST['land_type'])) ? 'checked' : '';
+                        $checked = (isset($_POST['land_type']) && is_array($_POST['land_type']) && in_array($value, $_POST['land_type'])) ? 'checked' : '';
                         echo "<label><input type=\"checkbox\" name=\"land_type[]\" value=\"$value\" $checked> $label</label>";
                     }
                     ?>
