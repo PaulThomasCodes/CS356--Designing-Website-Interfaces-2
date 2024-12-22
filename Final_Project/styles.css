@@ -1,0 +1,104 @@
+/* Import Google Fonts for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* General Page Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa; /* Soft white background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Split Screen Layout */
+.split {
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+
+/* Left Section Styling */
+.left {
+    background-color: #333;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Right Section Styling */
+.right {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+}
+
+.right h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #4e6959; /* Matches the soft green */
+}
+
+.right p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Landee Header Styling */
+.right .landee-header {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4rem;
+    font-weight: 700;
+    color: #c9a44a; /* Soft gold color */
+}
+
+/* Button Styling */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #c9a44a; /* Soft gold */
+    color: white;
+    text-decoration: none;
+    font-size: 1.25rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-weight: 700;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.btn:hover {
+    background-color: #b4913f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Button Bounce Animation */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
